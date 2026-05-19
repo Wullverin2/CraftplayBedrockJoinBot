@@ -1,0 +1,40 @@
+services:
+  joinbot:
+    build: .
+    container_name: craftplay-joinbot
+    env_file: .env
+    volumes:
+      - ./config:/app/config
+      - ./auth:/app/auth
+      - ./logs:/app/logs
+    ports: ["8085:8085"]
+    depends_on:
+      redis: { condition: service_healthy }
+      mariadb: { condition: service_healthy }
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:8085/api/v1/status"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+  redis:
+    image: redis:7-alpine
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  mariadb:
+    image: mariadb:11
+    environment:
+      MYSQL_DATABASE: joinbot
+      MYSQL_USER: joinbot
+      MYSQL_PASSWORD: change-me
+      MYSQL_ROOT_PASSWORD: root
+    volumes: ["mariadb-data:/var/lib/mysql"]
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+volumes:
+  mariadb-data:
