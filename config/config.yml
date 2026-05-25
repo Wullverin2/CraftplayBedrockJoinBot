@@ -1,0 +1,77 @@
+network:
+  name: "Craftplay.de"
+  public_motd: "Craftplay.de JoinBot"
+  max_total_players: 50
+
+target:
+  host: "127.0.0.1"
+  port: 19132
+  type: "geyser"
+
+bot:
+  id: "main-bot"
+  display_name: "CraftplayJoin"
+  enabled: true
+  auth_cache_dir: "./auth"
+  max_players: 20
+  reconnect_delay_seconds: 15
+  reconnect_attempts: 10
+  heartbeat_seconds: 10
+
+queue:
+  enabled: true
+  max_size: 500
+  position_update_seconds: 10
+  join_timeout_seconds: 60
+
+limits:
+  join_cooldown_seconds: 8
+  max_sessions_per_xuid: 1
+  max_reconnects_per_10min: 5
+  max_api_requests_per_minute: 120
+
+api:
+  enabled: true
+  bind: "0.0.0.0"
+  port: 8085
+  base_path: "/api/v1"
+  auth:
+    mode: "api_key"
+    header: "X-JoinBot-Key"
+    ip_whitelist:
+      enabled: false
+      allowed:
+        - "127.0.0.1"
+    keys:
+      - name: "teamcontrol"
+        key: "CHANGE_ME_LONG_RANDOM_KEY"
+        permissions: ["status.read","bot.read","bot.control","bot.auth","players.read","players.kick","queue.read","queue.manage","logs.read","metrics.read","reload"]
+  websocket:
+    enabled: true
+    path: "/api/v1/events"
+
+redis:
+  host: "redis"
+  port: 6379
+  password: ""
+
+database:
+  type: "mariadb"
+  host: "mariadb"
+  port: 3306
+  database: "joinbot"
+  username: "joinbot"
+  password: "change-me"
+  pool:
+    min: 2
+    max: 10
+
+security:
+  token_encryption:
+    enabled: true
+    key_env: "JOINBOT_TOKEN_KEY"
+
+logging:
+  level: "info"
+  file_enabled: true
+  file_path: "./logs/joinbot.log"

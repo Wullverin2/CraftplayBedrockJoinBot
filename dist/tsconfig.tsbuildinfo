@@ -1,0 +1,1 @@
+{"root":["../apps/admin-api/src/index.ts","../apps/gateway/src/index.ts","../packages/config/src/index.ts","../packages/config/src/schema.ts","../packages/database/src/index.ts","../packages/logger/src/index.ts","../packages/sessions/src/botManager.ts"],"errors":true,"version":"6.0.3"}
